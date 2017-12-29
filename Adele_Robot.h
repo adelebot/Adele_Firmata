@@ -16,8 +16,11 @@ Servo motorL;
 Servo motorR;
 
 void stopServos() {
-  motorL.write(CENTERL);
-  motorR.write(CENTERR);//calibrate stop
+  motorL.detach();
+  motorR.detach();
+  garra.detach();
+  //  motorL.write(CENTERL);
+  //  motorR.write(CENTERR);//calibrate stop
 }
 
 void adeleBegin() {
@@ -33,31 +36,45 @@ void adeleBegin() {
 
 
 void forward() {
+  motorL.attach(motorLpin);
+  motorR.attach(motorRpin);
   motorL.write(180 - SOFFSET);
   motorR.write(0 + SOFFSET); //calibrate stop
 }
 
 void backward() {
+  motorL.attach(motorLpin);
+  motorR.attach(motorRpin);
   motorL.write(0 + SOFFSET);
   motorR.write(180 - SOFFSET); //calibrate stop
 }
 
 void left() {
+  motorL.attach(motorLpin);
+  motorR.attach(motorRpin);
   motorL.write(0 + SOFFSET);
   motorR.write(0 + SOFFSET); //calibrate stop
 }
 
 void right() {
+  motorL.attach(motorLpin);
+  motorR.attach(motorRpin);
   motorL.write(180 - SOFFSET);
   motorR.write(180 - SOFFSET); //calibrate stop
 }
 
 void closeGarra() {
+  garra.attach(garraPin);
   garra.write(150);
+  delay(500);
+  garra.detach();
 }
 
 void openGarra() {
+  garra.attach(garraPin);
   garra.write(90);
+  delay(500);
+  garra.detach();
 }
 
 void stayInside() {//Stays inside line
@@ -72,6 +89,19 @@ void stayInside() {//Stays inside line
     forward();
     delay(10);
   }
+}
+
+void followLine() {//simple line follower
+  if (digitalRead(RIGHTIR)) {
+    right();
+    delay(20);
+  }
+  if (digitalRead(LEFTIR)) {
+    left();
+    delay(20);
+  }
+  forward();
+  delay(10);
 }
 
 void randomMove(int t) {
